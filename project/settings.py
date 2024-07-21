@@ -32,7 +32,9 @@ SECRET_KEY = 'django-insecure-s^d8q2rup1*6cx-zb%2e(=*3n-zg*o4wn=^w#0(=$zr7k#t5k1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['groupz.onrender.com', 'localhost', '127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://groupz.onrender.com']
+
 
 
 # Application definition
