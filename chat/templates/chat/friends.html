@@ -1,0 +1,17 @@
+{% extends "chat/chat.html" %}
+{% load static %}
+{% block title %}Friends{% endblock %}
+    {% block sidebar %}
+        <div class="nav flex-column nav-pills p-3">
+            <a class="nav-link text-light" href="{% url 'index' %}"><i class="fas fa-comments"></i><span>All chats</span></a>
+            <a class="nav-link text-light" href="{% url 'tabs' 'work' %}"><i class="fas fa-briefcase"></i><span>Work</span></a>
+            <a class="nav-link text-light active" href="{% url 'tabs' 'friends' %}"><i class="fas fa-user-friends"></i><span>Friends</span></a>
+            <a class="nav-link text-light" href="{% url 'tabs' 'news' %}"><i class="fas fa-newspaper"></i><span>News</span></a>
+            <a id="user_name" data-username="{{ user.username }}" class="nav-link text-light mt-auto" href="#"><i class="fas fa-user"></i><span>{{user.username}}</span></a>
+            <a class="nav-link text-light"><i class="fas fa-archive"></i><span>UID: {{user.id}}</span></a>
+            <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i><span>Log out</span></a>
+        </div>
+    {% endblock %}
+
+
+

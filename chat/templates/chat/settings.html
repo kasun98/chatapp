@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="{% static 'chat/settings.css' %}" rel="stylesheet">
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+</head>
+<body>
+    <div class="container-fluid h-100" style="padding: 0;">
+        <div class="row no-gutters h-100">
+            <!-- Sidebar -->
+            <div  class="col-2 sidebar text-light">
+                <div id="sh100" class="d-flex flex-column h-100">
+                    <div class="p-3">
+                        <h4 class="text-center" style="font-size: medium;">GROUPZ</h4>
+                    </div>
+                    <div class="nav flex-column nav-pills p-3">
+                        <a class="nav-link text-light" href="{% url 'index' %}"><i class="fas fa-comments"></i><span>All chats</span></a>
+                        <a class="nav-link text-light" href="{% url 'tabs' 'work' %}"><i class="fas fa-briefcase"></i><span>Work</span></a>
+                        <a class="nav-link text-light" href="{% url 'tabs' 'friends' %}"><i class="fas fa-user-friends"></i><span>Friends</span></a>
+                        <a class="nav-link text-light" href="{% url 'tabs' 'news' %}"><i class="fas fa-newspaper"></i><span>News</span></a>
+                        <a id="user_name" data-username="{{ user.username }}" class="nav-link text-light mt-auto" href="#"><i class="fas fa-user"></i><span>{{user.username}}</span></a>
+                        <a class="nav-link text-light"><i class="fas fa-archive"></i><span>UID: {{user.id}}</span></a>
+                        <a class="nav-link text-light" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i><span>Log out</span></a>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="col-8 bg-white">
+                {% if messages %}
+                <div>
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <img src="https://res.cloudinary.com/dlb65j6di/image/upload/v1720444741/connected-world-concept-illustration_kzvgro.png" alt="Group Picture" class="rounded-circle mr-3" width="50" height="50">
+                        <a href="{% url 'rooms' data.id %}" style="text-decoration: none; color: #015c33;">
+                            <h3 class="mb-0">{{ data.room_name }} </h3>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        
+                        <ul class="list-group mb-4">
+                            <li class="list-group-item">Category: <strong>{{ data.category }}</strong></li>
+                            <li class="list-group-item">Number of Members: <strong>{{ members_count }}</strong></li>
+                            <li class="list-group-item">Total Number of Messages: <strong>{{ msg_count }}</strong></li>
+                            <li class="list-group-item">Admin: <strong>{{ data.owner }}</strong></li>
+                        </ul>
+                        
+                        <h5>Add Member</h5>
+                        <form id="add-member-form" class="form-inline">
+                            <input type="text" id="add-member-id" class="form-control mr-2" placeholder="User ID">
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form><br>
+                        <h5>Members</h5>
+                        <ul class="list-group mb-4">
+                            {% for member in members %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ member }}
+                                    {% if data.owner.username == me %}
+                                        {% if member != me %}
+                                        <button class="btn btn-danger btn-sm remove-member" data-userid="{{ member }}">Remove</button>
+                                        {% endif %}
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                            
+                        </ul>
+                        <hr>
+                        <h5>Delete Group</h5>
+                        <form method="post" class="form-inline">
+                            {% csrf_token %}
+                            <input type="text" id="add-member-id" name="confirmation_text" class="form-control mr-2" placeholder="Type 'YES' for Delete!">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form><br>
+                        
+                    </div>
+                </div>
+            </div>   
+            
+
+            
+        </div>
+    </div>
+
+
+    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#add-member-form').on('submit', function(event) {
+                event.preventDefault();
+                const userId = $('#add-member-id').val();
+                // AJAX call to add member
+                $.ajax({
+                    url: "{% url 'add_member' data.id %}",
+                    method: 'POST',
+                    data: {
+                        'user_id': userId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        location.reload();
+                    }
+                });
+            });
+
+            $('.remove-member').on('click', function() {
+                const userId = $(this).data('userid');
+                // AJAX call to remove member
+                $.ajax({
+                    url: "{% url 'remove_member' data.id %}",
+                    method: 'POST',
+                    data: {
+                        'user_id': userId,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+
+    
+    
+
+    
+</body>
+</html>
+
