@@ -211,9 +211,9 @@
             }
         }
 
-        // var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-        // const socketURL = `${ws_scheme}://${window.location.host}/ws/messages/{{data.id}}/`;
-        const socketURL = `ws://${window.location.host}/ws/messages/{{data.id}}/`;
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        const socketURL = `${ws_scheme}://${window.location.host}/ws/messages/{{data.id}}/`;
+        
         const socket = new WebSocket(socketURL)
 
         scrollToBottom();
