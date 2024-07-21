@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: daphne project.asgi:application --port $PORT --bind 0.0.0.0 -v2
+web: daphne -b 0.0.0.0 -p 8000 project.asgi:application
