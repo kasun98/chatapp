@@ -1,19 +1,22 @@
 import json
 import os
+from dotenv import load_dotenv
 import google.generativeai as genai
 from groq import Groq
 import markdown
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import Room, Message, User
+
 from datetime import datetime
 
-api_key = os.getenv('GEMINI_API_KEY')
-genai.configure(api_key=api_key)
+load_dotenv()
+
+g_key = os.getenv('GEMINI_API_KEY')
+genai.configure(api_key=g_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
-client = Groq(
-    api_key=os.getenv("GROQ_API_KEY"),
-)
+
+l_key = os.getenv("GROQ_API_KEY")
+client = Groq(api_key=l_key,)
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -77,6 +80,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def create_message(self, data):
+
+        from .models import Room, Message, User
+
         get_room = Room.objects.get(id=data["room_name"])
         username = User.objects.get(username=data["sender"])
 
