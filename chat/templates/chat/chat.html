@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}GROUPZ{% endblock %}</title>
-    
+    <link rel="icon" href="https://res.cloudinary.com/dlb65j6di/image/upload/v1721633141/message-circle-chat-svgrepo-com_riuwmz.svg" type="image/svg+xml">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="{% static 'chat/styles.css' %}" rel="stylesheet">
@@ -20,6 +21,16 @@
     
 </head>
 <body>
+    {% block loader %}
+        <div id="loading-screen">
+            <div class="loader">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    {% endblock %}
     <div class="container-fluid h-100" style="padding: 0;">
         <div class="row no-gutters h-100">
             <!-- Sidebar -->
@@ -145,6 +156,17 @@
             </div>
         </div>
     </div>
+
+    {% block script %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                setTimeout(function() {
+                    document.getElementById("loading-screen").style.display = "none";
+                    
+                }, 2000); 
+            });
+        </script>
+    {% endblock %}
 
     <script>
     $(document).ready(function(){
