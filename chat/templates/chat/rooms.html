@@ -223,7 +223,6 @@
         const message_form = document.getElementById("msg-form")
         message_form.addEventListener("click", function (event) {
             event.preventDefault();
-            console.log("Sending Message")
             let message_sent = document.getElementById("message").value;
             const timestamp = new Date();
             const formattedTimestamp = formatTimestamp(timestamp);
@@ -238,8 +237,6 @@
                     })
             );
 
-          } else {
-            console.log("Empty Message");
           }
           
         });
@@ -247,8 +244,6 @@
         // Recieve Message from the backend
         socket.addEventListener("message", (e) => {
           const data = JSON.parse(e.data)["message"]
-    
-          console.log(data);
     
           let sender = data["sender"];
           let content = data["message"];
