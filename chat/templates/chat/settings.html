@@ -83,12 +83,15 @@
                             
                         </ul>
                         <hr>
+                        {% if data.owner.username == me %}
                         <h5>Delete Group</h5>
                         <form method="post" class="form-inline">
                             {% csrf_token %}
                             <input type="text" id="add-member-id" name="confirmation_text" class="form-control mr-2" placeholder="Type 'YES' for Delete!">
                             <button type="submit" class="btn btn-danger">Delete</button>
-                        </form><br>
+                        </form>
+                        {% endif %}
+                        <br>
                         
                     </div>
                 </div>

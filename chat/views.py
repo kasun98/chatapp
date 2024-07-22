@@ -208,7 +208,7 @@ def settings(request, id):
 
     if request.method == "POST":
         confirmation_text = request.POST["confirmation_text"]
-        if confirmation_text == 'YES':
+        if (confirmation_text == 'YES') and (data.owner == request.user):
             data.delete()
             return redirect('index')
         else:
