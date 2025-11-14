@@ -74,9 +74,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = event["message"]
         sender_channel = event["sender_channel"]
 
-        # Send the message to the WebSocket
-        response = {"sender": data["sender"], "message": data["message"], "time": data["time"]}
-        await self.send(text_data=json.dumps({"message": response}))
+        if self.channel_name != sender_channel:
+            # Send the message to the WebSocket
+            response = {"sender": data["sender"], "message": data["message"], "time": data["time"]}
+            await self.send(text_data=json.dumps({"message": response}))
 
     @database_sync_to_async
     def create_message(self, data):
